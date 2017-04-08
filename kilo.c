@@ -59,13 +59,21 @@ char editorReadKey() {
 	return c;
 }
 
+/*** output ***/
+
+void editorRefreshScreen() {
+	write(STDOUT_FILENO, "\x1b[2J", 4);
+	write(STDOUT_FILENO, "\x1b[H", 3);
+}
+
 /*** input ***/
 
 void editorProcessorKeypress() {
 	char c = editorReadKey();
-
 	switch(c) {
 		case CTRL_KEY('q'):
+			write(STDOUT_FILENO, "\x1b[2J", 4);
+			write(STDOUT_FILENO, "\x1b[H", 3);
 			exit(0);
 			break;
 	}
@@ -77,6 +85,7 @@ int main() {
 	enableRawMode();
 
 	while (1) {
+		editorRefreshScreen();
 		editorProcessorKeypress();
 	}
 	return 0;
